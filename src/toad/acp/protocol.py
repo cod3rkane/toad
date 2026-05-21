@@ -330,6 +330,7 @@ type SessionUpdate = (
     | Plan
     | AvailableCommandsUpdate
     | CurrentModeUpdate
+    | UsageUpdate
 )
 
 

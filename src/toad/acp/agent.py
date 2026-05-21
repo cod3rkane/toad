@@ -224,11 +224,6 @@ class Agent(AgentBase):
         https://agentclientprotocol.com/protocol/schema
         """
         status_line: str | None = None
-        if _meta and (field_meta := _meta.get("field_meta")) is not None:
-            if (
-                open_hands_metrics := field_meta.get("openhands.dev/metrics")
-            ) is not None:
-                status_line = open_hands_metrics.get("status_line")
 
         match update:
             case {
@@ -295,6 +290,12 @@ class Agent(AgentBase):
 
             case {"sessionUpdate": "current_mode_update", "currentModeId": mode_id}:
                 self.post_message(messages.ModeUpdate(mode_id))
+
+            case {
+                "sessionUpdate": "usage_update",
+            }:
+                update
+                pass
 
         if status_line is not None:
             self.post_message(messages.UpdateStatusLine(status_line))

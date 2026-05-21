@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class AgentMessage(Message):
-    pass
+    """Base class for agent messages."""
 
 
 @dataclass
@@ -142,3 +142,9 @@ class ModeUpdate(AgentMessage):
     """Agent informed us about a mode change."""
 
     current_mode: str
+
+
+@dataclass
+class UsageUpdage(AgentMessage):
+    used: int
+    size: int

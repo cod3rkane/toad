@@ -5,7 +5,7 @@ description = "A unified experience for AI in your terminal."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "textual[syntax]==8.2.6",
+    "textual[syntax]==8.2.7",
     "click==8.4.0",
     "httpx==0.28.1",
     "platformdirs==4.9.6",
@@ -25,6 +25,7 @@ dependencies = [
     "aiosqlite==0.22.1",
     "textual-diff-view==0.1.5",
     "typing-extensions==4.15.0",
+    "format-currency>=0.0.10",
 ]
 
 [tool.uv.workspace]
