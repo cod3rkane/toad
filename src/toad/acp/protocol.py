@@ -9,6 +9,12 @@ class SchemaDict(TypedDict, total=False, extra_items=Any):
 # Types
 
 
+# https://agentclientprotocol.com/rfds/session-usage#context-window-and-cost-via-session/update
+class Cost(TypedDict, total=False, extra_items=Any):
+    amount: float
+    currency: str
+
+
 class FileSystemCapability(SchemaDict, total=False, extra_items=Any):
     readTextFile: bool
     writeTextFile: bool
@@ -308,6 +314,13 @@ class CurrentModeUpdate(SchemaDict, total=False, extra_items=Any):
     sessionUpdate: Required[Literal["current_mode_update"]]
 
 
+class UsageUpdate(SchemaDict, total=False, extra_items=Any):
+    sessionUpdate: Required[Literal["usage_update"]]
+    used: Required[int]
+    size: Required[int]
+    cost: Cost
+
+
 type SessionUpdate = (
     UserMessageChunk
     | AgentMessageChunk
@@ -376,6 +389,7 @@ class LoadSessionResponse(SchemaDict, total=False, extra_items=Any):
 
 
 class SessionPromptResponse(SchemaDict, total=False, extra_items=Any):
+    sessionId: Required[str]
     stopReason: Required[
         Literal[
             "end_turn",
@@ -430,3 +444,13 @@ class SetSessionModeResponse(TypedDict, total=False, extra_items=Any):
 
 
 # ---------------------------------------------------------------------------------------
+
+
+# https://agentclientprotocol.com/rfds/session-usage#usage-fields
+class Usage(TypedDict, total=False, extra_items=Any):
+    total_tokens: Required[int]
+    input_tokens: Required[int]
+    output_tokens: Required[int]
+    thought_tokens: int
+    cached_read_tokens: int
+    cached_write_tokens: int
