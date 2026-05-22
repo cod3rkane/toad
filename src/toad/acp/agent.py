@@ -274,7 +274,6 @@ class Agent(AgentBase):
 
         https://agentclientprotocol.com/protocol/schema
         """
-        status_line: str | None = None
 
         match update:
             case {
@@ -350,8 +349,7 @@ class Agent(AgentBase):
                         )
                     case _:
                         self._context_usage = ContextUsage(used, size)
-
-        self.update_status_line()
+                self.update_status_line()
 
     def update_status_line(self) -> None:
         """Update the current status line."""
