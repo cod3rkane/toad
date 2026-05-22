@@ -843,7 +843,7 @@ class Agent(AgentBase):
             return None
 
         assert result is not None
-        # TODO
+        # TODO: Where to display this?
         token_usage = result.get("usage")
 
         return result.get("stopReason")
