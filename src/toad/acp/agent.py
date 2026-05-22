@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 from typing import Any, cast, NamedTuple
 from copy import deepcopy
-
+from math import floor
 import rich.repr
 
 from textual.content import Content
@@ -38,6 +38,50 @@ class Mode(NamedTuple):
     id: str
     name: str
     description: str | None
+
+
+class ContextUsage(NamedTuple):
+    """Context window usage."""
+
+    used: int
+    size: int
+    cost: Cost | None = None
+
+    @property
+    def percentage_used(self) -> float:
+        return (self.used / self.size) * 100.0
+
+    @property
+    def percentage_display(self) -> str:
+        return f"{floor(self.percentage_used * 10) / 10:.1f}%"
+
+
+class Cost(NamedTuple):
+    """A cost with associated currency."""
+
+    amount: float
+    currency: str
+
+    def __str__(self) -> str:
+        return f"{self:}"
+
+    def __format__(self, _specifier: str) -> str:
+        from format_currency import format_currency
+
+        amount, currency = self
+        currency_text = format_currency(amount, currency_code=currency).replace(" ", "")
+        return currency_text
+
+
+class TokenUsage(NamedTuple):
+    """Tokens used for a single prompt (per-turn)."""
+
+    total_tokens: int
+    input_tokens: int
+    output_tokens: int
+    thought_tokens: int | None
+    cached_read_tokens: int | None
+    cached_write_tokens: int | None
 
 
 def generate_datetime_filename(
@@ -117,6 +161,9 @@ class Agent(AgentBase):
                 self._log_file_path.unlink(missing_ok=True)
         else:
             self._log_file_path = paths.get_log() / log_filename
+
+        self._token_usage: TokenUsage | None = None
+        self._context_usage: ContextUsage | None = None
 
     @property
     def command(self) -> str | None:
@@ -291,13 +338,34 @@ class Agent(AgentBase):
             case {"sessionUpdate": "current_mode_update", "currentModeId": mode_id}:
                 self.post_message(messages.ModeUpdate(mode_id))
 
-            case {
-                "sessionUpdate": "usage_update",
-            }:
-                update
-                pass
+            case {"sessionUpdate": "usage_update", "used": used, "size": size}:
+                match update.get("cost"):
+                    case {"amount": amount, "currency": currency}:
+                        self._context_usage = ContextUsage(
+                            used, size, Cost(amount, currency)
+                        )
+                    case _:
+                        self._context_usage = ContextUsage(used, size)
+                print(self._context_usage)
 
-        if status_line is not None:
+        # if status_line is not None:
+        #     self.post_message(messages.UpdateStatusLine(status_line))
+        self.update_status_line()
+
+    def update_status_line(self) -> None:
+        status: list[Content] = []
+        if (usage := self._context_usage) is not None:
+            status.append(
+                Content.assemble(
+                    f"{usage.used / 1000:.1f}K",
+                    " ",
+                    f"({usage.percentage_display})",
+                )
+            )
+            if (cost := usage.cost) is not None:
+                status.append(Content.assemble(f"{cost}"))
+
+            status_line = Content(" • ").join(status)
             self.post_message(messages.UpdateStatusLine(status_line))
 
     @jsonrpc.expose("session/request_permission")
@@ -775,6 +843,9 @@ class Agent(AgentBase):
             return None
 
         assert result is not None
+        # TODO
+        token_usage = result.get("usage")
+
         return result.get("stopReason")
 
     async def acp_session_set_mode(self, mode_id: str) -> str | None:

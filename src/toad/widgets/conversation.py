@@ -350,7 +350,7 @@ class Conversation(containers.Vertical):
     modes: var[dict[str, Mode]] = var({}, bindings=True)
     current_mode: var[Mode | None] = var(None)
     turn: var[Literal["agent", "client"] | None] = var(None, bindings=True)
-    status: var[str] = var("")
+    status: var[str | Content] = var("")
     column: var[bool] = var(False, toggle_class="-column")
 
     title = var("")

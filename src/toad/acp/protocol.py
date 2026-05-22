@@ -314,7 +314,7 @@ class CurrentModeUpdate(SchemaDict, total=False, extra_items=Any):
     sessionUpdate: Required[Literal["current_mode_update"]]
 
 
-class UsageUpdate(SchemaDict, total=False, extra_items=Any):
+class UsageUpdate(SchemaDict, total=False, extra_items=object):
     sessionUpdate: Required[Literal["usage_update"]]
     used: Required[int]
     size: Required[int]
@@ -389,7 +389,7 @@ class LoadSessionResponse(SchemaDict, total=False, extra_items=Any):
     modes: SessionModeState | None
 
 
-class SessionPromptResponse(SchemaDict, total=False, extra_items=Any):
+class SessionPromptResponse(SchemaDict, total=False, extra_items=object):
     sessionId: Required[str]
     stopReason: Required[
         Literal[
@@ -400,6 +400,7 @@ class SessionPromptResponse(SchemaDict, total=False, extra_items=Any):
             "cancelled",
         ]
     ]
+    usage: Usage
 
 
 # https://agentclientprotocol.com/protocol/schema#requestpermissionresponse

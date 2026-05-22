@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from asyncio import Future
-from typing import Any, Mapping, TYPE_CHECKING
+from typing import Mapping, TYPE_CHECKING
 from textual.message import Message
 
 import rich.repr
@@ -13,6 +13,7 @@ from toad.acp import protocol
 from toad.acp.encode_tool_call_id import encode_tool_call_id
 
 if TYPE_CHECKING:
+    from textual.content import Content
     from toad.acp.agent import Mode
     from toad.widgets.terminal_tool import ToolState
 
@@ -29,7 +30,7 @@ class Thinking(AgentMessage):
 
 @dataclass
 class UpdateStatusLine(AgentMessage):
-    status_line: str
+    status_line: str | Content
 
 
 @dataclass
@@ -146,5 +147,8 @@ class ModeUpdate(AgentMessage):
 
 @dataclass
 class UsageUpdage(AgentMessage):
+    """Context window change"""
+
     used: int
     size: int
+    cost: tuple[float, str] | None
