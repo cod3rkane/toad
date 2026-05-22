@@ -54,9 +54,11 @@ def condense_path(path: str, width: int, *, prefix: str = "") -> str:
         candidate += "/"
 
     for left, right in radiate_range(len(components)):
-        if cell_len(candidate) < width:
+        if cell_len(candidate) <= width:
             return candidate
         condensed = [*components[:left], "…", *components[right:]]
+        if len(condensed) <= 2:
+            return str(Content(components[-1]).truncate(width, ellipsis=True))
         candidate = prefix + "/".join(condensed)
         if trailing_slash and candidate and not candidate.endswith("/"):
             candidate += "/"
@@ -80,7 +82,7 @@ class CondensedPath(Widget):
         *,
         directory: bool = False,
         id: str | None = None,
-        classes: str | None = None
+        classes: str | None = None,
     ) -> None:
         super().__init__(id=id, classes=classes)
         self.set_reactive(CondensedPath.path, path)
