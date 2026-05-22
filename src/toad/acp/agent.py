@@ -49,7 +49,11 @@ class ContextUsage(NamedTuple):
 
     @property
     def percentage_used(self) -> float:
-        return (self.used / self.size) * 100.0
+        try:
+            return (self.used / self.size) * 100.0
+        except ZeroDivisionError:
+            # Sanity check. If size is 0, then 100% is always used?
+            return 100.0
 
     @property
     def percentage_display(self) -> str:
