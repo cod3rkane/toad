@@ -68,7 +68,7 @@ class ModeInfo(Label):
 
 
 class StatusLine(Label):
-    status: var[str] = var("")
+    status: var[str | Content] = var("")
 
     def watch_status(self, status: str) -> None:
         self.set_class(not bool(status), "-hidden")
@@ -460,7 +460,7 @@ class Prompt(containers.VerticalGroup):
     agent_ready: var[bool] = var(False)
     current_mode: var[Mode | None] = var(None)
     modes: var[dict[str, Mode] | None] = var(None)
-    status: var[str] = var("")
+    status: var[str | Content] = var("")
 
     app = getters.app(ToadApp)
 
