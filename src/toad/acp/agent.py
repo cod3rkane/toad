@@ -346,24 +346,24 @@ class Agent(AgentBase):
                         )
                     case _:
                         self._context_usage = ContextUsage(used, size)
-                print(self._context_usage)
 
-        # if status_line is not None:
-        #     self.post_message(messages.UpdateStatusLine(status_line))
         self.update_status_line()
 
     def update_status_line(self) -> None:
-        status: list[Content] = []
+        """Update the current status line."""
+
         if (usage := self._context_usage) is not None:
+            status: list[Content] = []
             status.append(
                 Content.assemble(
                     f"{usage.used / 1000:.1f}K",
-                    " ",
-                    f"({usage.percentage_display})",
+                    " (",
+                    (f"{usage.percentage_display}", "bold"),
+                    ")",
                 )
             )
             if (cost := usage.cost) is not None:
-                status.append(Content.assemble(f"{cost}"))
+                status.append(Content.assemble((f"{cost}", "bold")))
 
             status_line = Content(" • ").join(status)
             self.post_message(messages.UpdateStatusLine(status_line))
