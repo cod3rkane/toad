@@ -23,11 +23,6 @@ Supports file operations, shell access, subagents, MCP tools, and dynamic model 
 '''
 
 [actions."*".install]
-command = "uv tool install deepagents-cli -U --python 3.12"
+command = "curl -LsSf https://langch.in/dcode | bash"
 bootstrap_uv = true
-description = "Install deepagents-cli"
-
-[actions."*".update]
-command = "uv tool install deepagents-cli -U --python 3.12"
-bootstrap_uv = true
-description = "Update deepagents-cli"
+description = "Install deepagents-code"

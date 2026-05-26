@@ -240,7 +240,9 @@ class Agent(AgentBase):
             request: JSONRPC request object.
 
         """
-        assert self._process is not None, "Process should be present here"
+        if self._process is None:
+            self.log("[error] Agent process isnt running")
+            return
 
         self.log(f"[client] {request.body}")
         if (stdin := self._process.stdin) is not None:
