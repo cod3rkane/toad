@@ -5,11 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.19] - 2016-05-22
+## Unreleased
+
+### Changed
+
+- Style tweak for compact prompt
+- Fix for overly wide question text
+
+## [0.6.20] - 2016-05-22
+
+### Added
+
+- Added Grok to store
+
+## [0.6.19] - 2026-05-22
 
 ### Added
 
 - Added context usage and context to status line
+
 
 ## [0.6.18] - 2026-05-17
 
@@ -446,6 +460,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First release. This document will be updated for subsequent releases.
 
 
+[0.6.20]: https://github.com/batrachianai/toad/compare/v0.6.18...v0.6.20
 [0.6.18]: https://github.com/batrachianai/toad/compare/v0.6.17...v0.6.18
 [0.6.17]: https://github.com/batrachianai/toad/compare/v0.6.16...v0.6.17
 [0.6.16]: https://github.com/batrachianai/toad/compare/v0.6.15...v0.6.16
