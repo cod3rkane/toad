@@ -38,6 +38,7 @@ PermissionsScreen {
     }
     Question {        
         width: auto;
+        max-width: 32;
         expand: optimal;
         border: tall black 10%;
         background: black 10%;

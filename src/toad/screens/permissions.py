@@ -392,7 +392,14 @@ def loop_first_last(values: Iterable[ValueType]) -> Iterable[tuple[bool, bool, V
         @work
         async def on_mount(self) -> None:
             screen = PermissionsScreen(
-                [Answer("Foo", "allow_once", kind="allow_once"), Answer("Bar", "bar")],
+                [
+                    Answer(
+                        "Foo, with some long text that should wrap at some point",
+                        "allow_once",
+                        kind="allow_once",
+                    ),
+                    Answer("Bar", "bar"),
+                ],
                 [("foo.py", "foo2.py", SOURCE1, SOURCE2)],
             )
             result = await self.push_screen_wait(screen)
