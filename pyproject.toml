@@ -26,6 +26,8 @@ dependencies = [
     "textual-diff-view==0.1.5",
     "typing-extensions==4.15.0",
     "format-currency>=0.0.10",
+    "winfcntl>=1.1.9",
+    "pywinpty>=3.0.5",
 ]
 
 [tool.uv.workspace]

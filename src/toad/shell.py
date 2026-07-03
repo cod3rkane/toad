@@ -1,15 +1,22 @@
 from __future__ import annotations
 
-
-from contextlib import suppress
-import os
 import asyncio
 import codecs
-import fcntl
+import os
 import platform
-import pty
 import struct
-import termios
+from contextlib import suppress
+
+if platform.system() == "Windows":
+    import msvcrt
+
+    import winfcntl
+    import winpty
+else:
+    import fcntl
+    import pty
+    import termios
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -17,7 +24,6 @@ from textual import log
 from textual.message import Message
 
 from toad.shell_read import shell_read
-
 from toad.widgets.terminal import Terminal
 
 if TYPE_CHECKING:
@@ -104,7 +110,7 @@ class Shell:
         try:
             shell_process = psutil.Process(self._pid)
             children = shell_process.children(recursive=True)
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except psutil.NoSuchProcess, psutil.AccessDenied:
             return False
         else:
             return bool(children)
