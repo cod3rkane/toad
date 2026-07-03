@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Adds winfcntl and pywinpty for Native Windows Support, also it checks when Windows plataform to use these new libraries
+
 ### Changed
 
 - Style tweak for compact prompt
