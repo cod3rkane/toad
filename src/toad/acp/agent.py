@@ -1,33 +1,27 @@
 import asyncio
-
-from contextlib import suppress
-from datetime import datetime
 import json
 import os
-from pathlib import Path
-from typing import Any, cast, NamedTuple
+from contextlib import suppress
 from copy import deepcopy
+from datetime import datetime
 from math import floor
-import rich.repr
+from pathlib import Path
+from typing import Any, NamedTuple, cast
 
+import rich.repr
 from textual.content import Content
 from textual.message import Message
 from textual.message_pump import MessagePump
 
-
-from toad import jsonrpc
 import toad
-from toad.agent_schema import Agent as AgentData
-from toad.agent import AgentBase, AgentReady, AgentFail
-from toad.acp import protocol
-from toad.acp import api
+from toad import constants, jsonrpc, paths
+from toad.acp import api, messages, protocol
 from toad.acp.api import API
-from toad.acp import messages
 from toad.acp.prompt import build as build_prompt
-from toad.db import DB
-from toad import paths
-from toad import constants
+from toad.agent import AgentBase, AgentFail, AgentReady
+from toad.agent_schema import Agent as AgentData
 from toad.answer import Answer
+from toad.db import DB
 
 PROTOCOL_VERSION = 1
 
@@ -209,7 +203,7 @@ class Agent(AgentBase):
         def write_log(log_file_path: Path, line: str):
             """Write log in a thread."""
             try:
-                with log_file_path.open("at") as log_file:
+                with log_file_path.open("at", encoding="utf-8") as log_file:
                     log_file.write(f"{line.rstrip()}\n")
             except OSError:
                 pass
